@@ -3,7 +3,6 @@ import sys
 import os
 import click
 import psutil
-import time
 from datetime import datetime
 from PIL import Image
 from io import BytesIO
@@ -18,13 +17,24 @@ if not check_chrome_started():
 
 driver = get_started_chrome()
 driver.get("https://shinycolors.enza.fun/exSkill")
-time.sleep(3)
 
 try:
     canvas = driver.find_element_by_tag_name('canvas')
-    while True:
-        time.sleep(0.5)
 
+    # Exスキル画面のプロデュースボタンが見えるまで無限ループ
+    while True:
+        # temp_name = TEMP_DIR + datetime.now().strftime("%Y%m%d%H%M%S")
+        original_image = canvas.screenshot_as_png
+        original_image = Image.open(BytesIO(original_image))
+        produce_button_image = original_image.crop(CARD_TYPE_PRODUCE_SEARCH_ROI)
+        produce_button_frame = np.asarray(produce_button_image)
+        produce_button_frame = cv2.cvtColor(produce_button_frame, cv2.COLOR_RGB2BGR)
+        res = cv2.matchTemplate(produce_button_frame, BINARY_PRODUCE_ON_BUTTON, cv2.TM_CCORR_NORMED)
+        _, max_val, _, max_loc = cv2.minMaxLoc(res)
+        if (max_val > 0.99):
+            break
+
+    while True:
         # temp_name = TEMP_DIR + datetime.now().strftime("%Y%m%d%H%M%S")
         original_image = canvas.screenshot_as_png
         # with open(temp_name + '_org.png', 'wb') as f:

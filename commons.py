@@ -22,6 +22,7 @@ RESOURCES_DIR = os.getcwd() + os.sep + 'resources' + os.sep
 PRODUCE_EX_SKILL_DIR = RESOURCES_DIR + 'ex_skills' + os.sep + 'produce' + os.sep
 SUPPORT_EX_SKILL_DIR = RESOURCES_DIR + 'ex_skills' + os.sep + 'support' + os.sep
 EJECT_BUTTON_DIR = RESOURCES_DIR + 'eject_buttons' + os.sep
+CARD_TYPE_BUTTON_DIR = RESOURCES_DIR + 'card_type_buttons' + os.sep
 NPZ_FILE = RESOURCES_DIR + 'bundle.npz'
 LOG_DIR = os.getcwd() + os.sep + 'log' + os.sep
 TEMP_DIR = os.getcwd() + os.sep + 'temp' + os.sep
@@ -81,10 +82,26 @@ EJECT_BUTTON_NAMES = [
     # 'eject_off',
     # 'eject_none',
 ]
+CARD_TYPE_BUTTON_NAMES = [
+    'produce_on',
+    'produce_off',
+    'support_on',
+    'support_off',
+]
 # 先頭キャラの1枠目
 EX_SKILL_BUTTON_ROI = (255, 254, 344, 343)
 # 「はずす」ボタン
 EJECT_BUTTON_ROI = (1169, 811, 1386, 914)
+# プロデューストグルボタン
+CARD_TYPE_PRODUCE_BUTTON_ROI = (62, 130, 291, 185)
+CARD_TYPE_PRODUCE_BUTTON_CLICK_LEFT = 178
+CARD_TYPE_PRODUCE_BUTTON_CLICK_TOP = 157
+# サポートトグルボタン
+CARD_TYPE_SUPPORT_BUTTON_ROI = (321, 130, 524, 185)
+CARD_TYPE_SUPPORT_BUTTON_CLICK_LEFT = 416
+CARD_TYPE_SUPPORT_BUTTON_CLICK_TOP = 157
+# プロデュースの探索範囲(固定秒待機をやめる用)
+CARD_TYPE_PRODUCE_SEARCH_ROI = (50, 120, 300, 200)
 # Exスキルの探索範囲
 EX_SKILL_SEARCH_LEFT = 240
 EX_SKILL_SEARCH_TOP = 210
@@ -99,6 +116,7 @@ NPZ_DATA = np.load(resource_path(NPZ_FILE), allow_pickle = True)
 BINARY_PRODUCE_EX_SKILLS = NPZ_DATA['produce_ex_skills']
 BINARY_SUPPORT_EX_SKILLS = NPZ_DATA['support_ex_skills']
 BINARY_EJECT_BUTTONS = NPZ_DATA['eject_buttons']
+BINARY_PRODUCE_ON_BUTTON = NPZ_DATA['produce_on_button']
 
 # Chromeが41200ポートで起動してるかチェック
 def check_chrome_started():
