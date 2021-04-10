@@ -88,6 +88,10 @@ CARD_TYPE_BUTTON_NAMES = [
     'support_on',
     'support_off',
 ]
+CARD_TYPE_TARGET_NAMES = [
+    'produce',
+    'support',
+]
 # 先頭キャラの1枠目
 EX_SKILL_BUTTON_ROI = (255, 254, 344, 343)
 # 「はずす」ボタン
