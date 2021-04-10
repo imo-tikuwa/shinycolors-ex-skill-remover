@@ -23,14 +23,13 @@ try:
 
     # Exスキル画面のプロデュースボタンが見えるまで無限ループ
     while True:
-        # temp_name = TEMP_DIR + datetime.now().strftime("%Y%m%d%H%M%S")
         original_image = canvas.screenshot_as_png
         original_image = Image.open(BytesIO(original_image))
         produce_button_image = original_image.crop(CARD_TYPE_PRODUCE_SEARCH_ROI)
         produce_button_frame = np.asarray(produce_button_image)
         produce_button_frame = cv2.cvtColor(produce_button_frame, cv2.COLOR_RGB2BGR)
         res = cv2.matchTemplate(produce_button_frame, BINARY_PRODUCE_ON_BUTTON, cv2.TM_CCORR_NORMED)
-        _, max_val, _, max_loc = cv2.minMaxLoc(res)
+        _, max_val, _, _ = cv2.minMaxLoc(res)
         if (max_val > 0.99):
             break
 
@@ -40,31 +39,6 @@ try:
         # with open(temp_name + '_org.png', 'wb') as f:
         #     f.write(original_image)
         original_image = Image.open(BytesIO(original_image))
-
-        # 「はずす」ボタンの辺りをざっくり切り抜いた画像を作成
-        eject_button_image = original_image.crop(EJECT_SEARCH_ROI)
-        # eject_button_image.save(temp_name + '_cropped_eject_area1.png')
-        eject_button_frame = np.asarray(eject_button_image)
-        eject_button_frame = cv2.cvtColor(eject_button_frame, cv2.COLOR_RGB2BGR)
-        # cv2.imwrite(temp_name + '_cropped_eject_area2.png', eject_button_frame)
-
-        # 「はずす」ボタンが表示されてたらクリック。
-        # カラー画像でテンプレートマッチング
-        # ボタンが存在したら後続のExスキル枠のマッチングを行わずに次のループに移動
-        exist_eject_button = False
-        for num, template_img in enumerate(BINARY_EJECT_BUTTONS):
-            res = cv2.matchTemplate(eject_button_frame, template_img, cv2.TM_CCORR_NORMED)
-            _, max_val, _, max_loc = cv2.minMaxLoc(res)
-            if (max_val > 0.99):
-                exist_eject_button = True
-                actions = ActionChains(driver)
-                actions.move_to_element_with_offset(canvas, EJECT_BUTTON_CLICK_LEFT, EJECT_BUTTON_CLICK_TOP)
-                actions.click()
-                actions.perform()
-                break
-        if exist_eject_button:
-            continue
-
 
         # Exスキルの1～3枠×4列分くらいの領域を切り抜いた画像を作成
         ex_skill_image = original_image.crop(EX_SKILL_SEARCH_ROI)
@@ -79,8 +53,9 @@ try:
             if (max_val > 0.99):
                 # canvas上のExスキルがある位置をクリック
                 actions = ActionChains(driver)
-                actions.move_to_element_with_offset(canvas, EX_SKILL_SEARCH_LEFT + max_loc[0], EX_SKILL_SEARCH_TOP + max_loc[1])
-                actions.click()
+                actions.move_to_element_with_offset(canvas, EX_SKILL_SEARCH_LEFT + max_loc[0], EX_SKILL_SEARCH_TOP + max_loc[1]).click()
+                # はずすボタンをクリック
+                actions.move_to_element_with_offset(canvas, EJECT_BUTTON_CLICK_LEFT, EJECT_BUTTON_CLICK_TOP).click()
                 actions.perform()
                 break
 
