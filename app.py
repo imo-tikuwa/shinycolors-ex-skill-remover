@@ -17,8 +17,9 @@ if not check_chrome_started():
 
 
 @click.command()
-@click.option('--target', required = True, help = "プロデュースとサポート。どっちのExスキルを外すか", type = click.Choice(CARD_TYPE_TARGET_NAMES, case_sensitive = True))
-def main(target):
+@click.option('--target', required=True, help="プロデュースとサポート。どっちのExスキルを外すか", type=click.Choice(CARD_TYPE_TARGET_NAMES, case_sensitive=True))
+@click.option('--debug', help="デバッグフラグ。trueのときテンプレートマッチングに使用する画像をtempディレクトリに保存します", is_flag=True)
+def main(target, debug):
     ex_skills = BINARY_PRODUCE_EX_SKILLS if target == 'produce' else BINARY_SUPPORT_EX_SKILLS
 
     driver = get_started_chrome()
@@ -46,15 +47,18 @@ def main(target):
             actions.perform()
 
         while True:
-            # temp_name = TEMP_DIR + datetime.now().strftime("%Y%m%d%H%M%S")
+            if debug:
+                temp_name = TEMP_DIR + datetime.now().strftime("%Y%m%d%H%M%S")
             original_image = canvas.screenshot_as_png
-            # with open(temp_name + '_org.png', 'wb') as f:
-            #     f.write(original_image)
+            if debug:
+                with open(temp_name + '_org.png', 'wb') as f:
+                    f.write(original_image)
             original_image = Image.open(BytesIO(original_image))
 
             # Exスキルの1～3枠×4列分くらいの領域を切り抜いた画像を作成
             ex_skill_image = original_image.crop(EX_SKILL_SEARCH_ROI)
-            # ex_skill_image.save(temp_name + '_cropped_ex_skill_area.png')
+            if debug:
+                ex_skill_image.save(temp_name + '_cropped_ex_skill_area.png')
             ex_skill_frame = np.asarray(ex_skill_image)
             ex_skill_frame = cv2.cvtColor(ex_skill_frame, cv2.COLOR_RGB2GRAY)
 
@@ -63,6 +67,8 @@ def main(target):
                 res = cv2.matchTemplate(ex_skill_frame, template_img, cv2.TM_CCORR_NORMED)
                 _, max_val, _, max_loc = cv2.minMaxLoc(res)
                 if (max_val > 0.99):
+                    if debug:
+                        print(max_val, max_loc)
                     actions = ActionChains(driver)
                     # Exスキルがある位置をクリック
                     actions.move_to_element_with_offset(canvas, EX_SKILL_SEARCH_LEFT + max_loc[0], EX_SKILL_SEARCH_TOP + max_loc[1]).click()
