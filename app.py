@@ -48,6 +48,7 @@ def main(target, debug):
             actions.move_to_element_with_offset(canvas, SUPPORT_BUTTON_CLICK_LEFT, SUPPORT_BUTTON_CLICK_TOP).click()
             actions.perform()
 
+        nothing_count = 0
         while True:
             if debug:
                 temp_name = TEMP_DIR + datetime.now().strftime("%Y%m%d%H%M%S")
@@ -69,6 +70,7 @@ def main(target, debug):
                 res = cv2.matchTemplate(ex_skill_frame, template_img, cv2.TM_CCORR_NORMED)
                 _, max_val, _, max_loc = cv2.minMaxLoc(res)
                 if (max_val > 0.99):
+                    nothing_count = 0
                     logger.debug(max_val, max_loc)
                     actions = ActionChains(driver)
                     # Exスキルがある位置をクリック
@@ -77,6 +79,12 @@ def main(target, debug):
                     actions.move_to_element_with_offset(canvas, EJECT_BUTTON_CLICK_LEFT, EJECT_BUTTON_CLICK_TOP).click()
                     actions.perform()
                     break
+            else:
+                if nothing_count >= 10:
+                    logger.info('Exスキルが10回連続で見つからなかったため処理を終了します')
+                    sys.exit(1)
+                nothing_count += 1
+
 
     except KeyboardInterrupt:
         logger.info('処理を中断しました')
