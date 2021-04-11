@@ -16,9 +16,7 @@ from commons import *
 @click.option('--name', required = True, help = "画像名", type = click.Choice(PRODUCE_EX_SKILL_NAMES, case_sensitive = True))
 def main(name):
 
-    if not check_chrome_started():
-        print('41200ポートでChromeが起動していません。exec_chrome.batよりGoogleChromeを起動してください')
-        sys.exit(1)
+    check_chrome_started()
 
     driver = get_started_chrome()
 

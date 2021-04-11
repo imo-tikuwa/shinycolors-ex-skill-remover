@@ -15,14 +15,12 @@ from commons import *
 @click.option('--name', required = True, help = "画像名", type = click.Choice(EJECT_BUTTON_NAMES, case_sensitive = True))
 def main(name):
 
-    if not check_chrome_started():
-        print('41200ポートでChromeが起動していません。exec_chrome.batよりGoogleChromeを起動してください')
-        sys.exit(1)
+    check_chrome_started()
 
     driver = get_started_chrome()
 
     canvas = driver.find_element_by_tag_name('canvas')
-    # 「はずす」ボタンをキャプチャ
+    # はずすボタンをキャプチャ
     image = Image.open(BytesIO(canvas.screenshot_as_png))
     image = image.crop(EJECT_BUTTON_ROI)
     image.save(EJECT_BUTTON_DIR + name + '.png')

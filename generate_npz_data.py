@@ -23,7 +23,7 @@ for image_path in glob.glob(SUPPORT_EX_SKILL_DIR + '*.png'):
     image = cv2.imread(image_path, cv2.IMREAD_GRAYSCALE)
     BINARY_SUPPORT_EX_SKILLS.append(image)
 
-# 「はずす」ボタンのサンプルデータ
+# はずすボタンのサンプルデータ
 BINARY_EJECT_BUTTONS = []
 for image_path in glob.glob(EJECT_BUTTON_DIR + '*.png'):
     image = cv2.imread(image_path, cv2.IMREAD_COLOR)
