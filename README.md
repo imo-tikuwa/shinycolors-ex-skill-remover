@@ -12,7 +12,7 @@
  - GoogleChrome : 89.0.4389.114
  - chromedriver : 88.0.4324.96
 
-※exec_chrome.bat、commons.pyの中で自分の環境用に決め打ちしてる変数、パスがあります
+※exec_chrome.bat、settings.iniの中で自分の環境用に決め打ちしてる変数、パスがあります
 
 ## 環境構築
 ```
