@@ -23,10 +23,6 @@ CONFIG_OPT_EX_SKILL_BUTTON_ROI_LEFT = 'ex_skill_button_roi_left'
 CONFIG_OPT_EX_SKILL_BUTTON_ROI_TOP = 'ex_skill_button_roi_top'
 CONFIG_OPT_EX_SKILL_BUTTON_ROI_RIGHT = 'ex_skill_button_roi_right'
 CONFIG_OPT_EX_SKILL_BUTTON_ROI_BOTTOM = 'ex_skill_button_roi_bottom'
-CONFIG_OPT_EJECT_BUTTON_ROI_LEFT = 'eject_button_roi_left'
-CONFIG_OPT_EJECT_BUTTON_ROI_TOP = 'eject_button_roi_top'
-CONFIG_OPT_EJECT_BUTTON_ROI_RIGHT = 'eject_button_roi_right'
-CONFIG_OPT_EJECT_BUTTON_ROI_BOTTOM = 'eject_button_roi_bottom'
 CONFIG_OPT_PRODUCE_BUTTON_ROI_LEFT = 'produce_button_roi_left'
 CONFIG_OPT_PRODUCE_BUTTON_ROI_TOP = 'produce_button_roi_top'
 CONFIG_OPT_PRODUCE_BUTTON_ROI_RIGHT = 'produce_button_roi_right'
@@ -43,10 +39,6 @@ CONFIG_OPT_EX_SKILL_SEARCH_ROI_LEFT = 'ex_skill_search_roi_left'
 CONFIG_OPT_EX_SKILL_SEARCH_ROI_TOP = 'ex_skill_search_roi_top'
 CONFIG_OPT_EX_SKILL_SEARCH_ROI_RIGHT = 'ex_skill_search_roi_right'
 CONFIG_OPT_EX_SKILL_SEARCH_ROI_BOTTOM = 'ex_skill_search_roi_bottom'
-CONFIG_OPT_EJECT_SEARCH_ROI_LEFT = 'eject_search_roi_left'
-CONFIG_OPT_EJECT_SEARCH_ROI_TOP = 'eject_search_roi_top'
-CONFIG_OPT_EJECT_SEARCH_ROI_RIGHT = 'eject_search_roi_right'
-CONFIG_OPT_EJECT_SEARCH_ROI_BOTTOM = 'eject_search_roi_bottom'
 CONFIG_OPT_EJECT_BUTTON_CLICK_LEFT = 'eject_button_click_left'
 CONFIG_OPT_EJECT_BUTTON_CLICK_TOP = 'eject_button_click_top'
 # setting.ini読み込み
@@ -56,7 +48,6 @@ SETTING_INI.read(CONFIG_FILE, 'cp932')
 RESOURCES_DIR = os.getcwd() + os.sep + 'resources' + os.sep
 PRODUCE_EX_SKILL_DIR = RESOURCES_DIR + 'ex_skills' + os.sep + 'produce' + os.sep
 SUPPORT_EX_SKILL_DIR = RESOURCES_DIR + 'ex_skills' + os.sep + 'support' + os.sep
-EJECT_BUTTON_DIR = RESOURCES_DIR + 'eject_buttons' + os.sep
 CARD_TYPE_BUTTON_DIR = RESOURCES_DIR + 'card_type_buttons' + os.sep
 NPZ_FILE = RESOURCES_DIR + 'bundle.npz'
 LOG_DIR = os.getcwd() + os.sep + 'log' + os.sep
@@ -111,13 +102,6 @@ SUPPORT_EX_SKILL_NAMES = [
     'kizuna',
     'support',
 ]
-EJECT_BUTTON_NAMES = [
-    'eject_on',
-    # 外すボタンについて「非活性のとき」と「表示されてないとき」の画像は不要だった。
-    # 以下は一旦コメントアウトし、resources以下のサンプル画像は削除する。
-    # 'eject_off',
-    # 'eject_none',
-]
 CARD_TYPE_BUTTON_NAMES = [
     'produce_on',
     'produce_off',
@@ -134,13 +118,6 @@ EX_SKILL_BUTTON_ROI = (
     SETTING_INI.getint(CONFIG_SECTION, CONFIG_OPT_EX_SKILL_BUTTON_ROI_TOP),
     SETTING_INI.getint(CONFIG_SECTION, CONFIG_OPT_EX_SKILL_BUTTON_ROI_RIGHT),
     SETTING_INI.getint(CONFIG_SECTION, CONFIG_OPT_EX_SKILL_BUTTON_ROI_BOTTOM),
-)
-# はずすボタン
-EJECT_BUTTON_ROI = (
-    SETTING_INI.getint(CONFIG_SECTION, CONFIG_OPT_EJECT_BUTTON_ROI_LEFT),
-    SETTING_INI.getint(CONFIG_SECTION, CONFIG_OPT_EJECT_BUTTON_ROI_TOP),
-    SETTING_INI.getint(CONFIG_SECTION, CONFIG_OPT_EJECT_BUTTON_ROI_RIGHT),
-    SETTING_INI.getint(CONFIG_SECTION, CONFIG_OPT_EJECT_BUTTON_ROI_BOTTOM),
 )
 # プロデュースボタン
 PRODUCE_BUTTON_ROI = (
@@ -169,13 +146,6 @@ EX_SKILL_SEARCH_ROI = (
     SETTING_INI.getint(CONFIG_SECTION, CONFIG_OPT_EX_SKILL_SEARCH_ROI_RIGHT),
     SETTING_INI.getint(CONFIG_SECTION, CONFIG_OPT_EX_SKILL_SEARCH_ROI_BOTTOM),
 )
-# はずすボタンの探索範囲
-EJECT_SEARCH_ROI = (
-    SETTING_INI.getint(CONFIG_SECTION, CONFIG_OPT_EJECT_SEARCH_ROI_LEFT),
-    SETTING_INI.getint(CONFIG_SECTION, CONFIG_OPT_EJECT_SEARCH_ROI_TOP),
-    SETTING_INI.getint(CONFIG_SECTION, CONFIG_OPT_EJECT_SEARCH_ROI_RIGHT),
-    SETTING_INI.getint(CONFIG_SECTION, CONFIG_OPT_EJECT_SEARCH_ROI_BOTTOM),
-)
 # はずすボタンのクリック位置
 EJECT_BUTTON_CLICK_LEFT = SETTING_INI.getint(CONFIG_SECTION, CONFIG_OPT_EJECT_BUTTON_CLICK_LEFT)
 EJECT_BUTTON_CLICK_TOP = SETTING_INI.getint(CONFIG_SECTION, CONFIG_OPT_EJECT_BUTTON_CLICK_TOP)
@@ -200,7 +170,6 @@ def resource_path(filename):
 NPZ_DATA = np.load(resource_path(NPZ_FILE), allow_pickle = True)
 BINARY_PRODUCE_EX_SKILLS = NPZ_DATA['produce_ex_skills']
 BINARY_SUPPORT_EX_SKILLS = NPZ_DATA['support_ex_skills']
-BINARY_EJECT_BUTTONS = NPZ_DATA['eject_buttons']
 BINARY_PRODUCE_ON_BUTTON = NPZ_DATA['produce_on_button']
 
 def check_chrome_started():
