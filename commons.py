@@ -6,9 +6,7 @@ import psutil
 import time
 import numpy as np
 from selenium import webdriver
-from selenium.webdriver.common.by import By
-from selenium.webdriver.support.ui import WebDriverWait
-from selenium.webdriver.support import expected_conditions as EC
+from selenium.common.exceptions import WebDriverException
 import logging
 import logzero
 from logzero import logger
@@ -198,3 +196,28 @@ def get_started_chrome():
     options.add_experimental_option("debuggerAddress", "127.0.0.1:41200")
     driver = webdriver.Chrome(executable_path=executable_path, options=options)
     return driver
+
+def wheel_element(element, deltaY = 120, offsetX = 0, offsetY = 0):
+    """
+    スクロール処理
+    https://stackoverflow.com/questions/47274852/mouse-scroll-wheel-with-selenium-webdriver-on-element-without-scrollbar
+    """
+    error = element._parent.execute_script("""
+        var element = arguments[0];
+        var deltaY = arguments[1];
+        var box = element.getBoundingClientRect();
+        var clientX = box.left + (arguments[2] || box.width / 2);
+        var clientY = box.top + (arguments[3] || box.height / 2);
+        var target = element.ownerDocument.elementFromPoint(clientX, clientY);
+        for (var e = target; e; e = e.parentElement) {
+            if (e === element) {
+                target.dispatchEvent(new MouseEvent('mouseover', {view: window, bubbles: true, cancelable: true, clientX: clientX, clientY: clientY}));
+                target.dispatchEvent(new MouseEvent('mousemove', {view: window, bubbles: true, cancelable: true, clientX: clientX, clientY: clientY}));
+                target.dispatchEvent(new WheelEvent('wheel',     {view: window, bubbles: true, cancelable: true, clientX: clientX, clientY: clientY, deltaY: deltaY}));
+                return;
+            }
+        }
+        return "Element is not interactable";
+        """, element, deltaY, offsetX, offsetY)
+    if error:
+        raise WebDriverException(error)

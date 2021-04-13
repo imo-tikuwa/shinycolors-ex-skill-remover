@@ -80,8 +80,11 @@ def main(target, debug):
                     actions.perform()
                     break
             else:
-                if nothing_count >= 10:
-                    logger.info('Exスキルが10回連続で見つからなかったため処理を終了します')
+                if nothing_count == 3:
+                    logger.info('Exスキルが3回連続で見つからなかったため下にスクロールします')
+                    wheel_element(canvas, 120, 500, 400)
+                elif nothing_count >= 8:
+                    logger.info('Exスキルが8回連続で見つからなかったため処理を終了します')
                     sys.exit(1)
                 nothing_count += 1
 
