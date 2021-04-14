@@ -30,6 +30,13 @@ def main(target, debug):
     try:
         canvas = driver.find_element_by_tag_name('canvas')
 
+        # canvasを左に揃える
+        driver.execute_script("""
+        var element = arguments[0];
+        element.style.setProperty('position', 'inherit', 'important');
+        element.style.setProperty('margin', '0', 'important');
+        """, canvas)
+
         # Exスキル画面のプロデュースボタンが見えるまで無限ループ
         while True:
             original_image = canvas.screenshot_as_png
@@ -80,11 +87,16 @@ def main(target, debug):
                     actions.perform()
                     break
             else:
-                if nothing_count == 3:
-                    logger.info('Exスキルが3回連続で見つからなかったため下にスクロールします')
-                    wheel_element(canvas, 120, 500, 400)
-                elif nothing_count >= 8:
-                    logger.info('Exスキルが8回連続で見つからなかったため処理を終了します')
+                if nothing_count == 2:
+                    logger.info('Exスキルが2回連続で見つからなかったため下にスクロールします')
+                    wheel_element(
+                        canvas,
+                        SETTING_INI.getint(CONFIG_SECTION, CONFIG_OPT_WHEEL_SCROLL_DELTA_Y),
+                        SETTING_INI.getint(CONFIG_SECTION, CONFIG_OPT_WHEEL_SCROLL_OFFSET_X),
+                        SETTING_INI.getint(CONFIG_SECTION, CONFIG_OPT_WHEEL_SCROLL_OFFSET_Y)
+                    )
+                elif nothing_count >= 6:
+                    logger.info('Exスキルが6回連続で見つからなかったため処理を終了します')
                     sys.exit(1)
                 nothing_count += 1
 

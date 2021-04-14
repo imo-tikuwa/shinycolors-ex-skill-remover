@@ -39,6 +39,9 @@ CONFIG_OPT_EX_SKILL_SEARCH_ROI_RIGHT = 'ex_skill_search_roi_right'
 CONFIG_OPT_EX_SKILL_SEARCH_ROI_BOTTOM = 'ex_skill_search_roi_bottom'
 CONFIG_OPT_EJECT_BUTTON_CLICK_LEFT = 'eject_button_click_left'
 CONFIG_OPT_EJECT_BUTTON_CLICK_TOP = 'eject_button_click_top'
+CONFIG_OPT_WHEEL_SCROLL_DELTA_Y = 'wheel_scroll_delta_y'
+CONFIG_OPT_WHEEL_SCROLL_OFFSET_X = 'wheel_scroll_offset_x'
+CONFIG_OPT_WHEEL_SCROLL_OFFSET_Y = 'wheel_scroll_offset_y'
 # setting.ini読み込み
 SETTING_INI = configparser.ConfigParser()
 SETTING_INI.read(CONFIG_FILE, 'cp932')
